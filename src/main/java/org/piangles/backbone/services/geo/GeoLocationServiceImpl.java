@@ -20,33 +20,74 @@ package org.piangles.backbone.services.geo;
 
 public class GeoLocationServiceImpl implements GeoLocationService
 {
+	private static final double ONE_DEGREE_IN_RADIAN = Math.PI / 180;
+	private static final double ONE_RADIAN_IN_DEGREE = 180 / Math.PI;
 
+	public GeoLocationServiceImpl()
+	{
+		
+	}
+	
 	@Override
-	public GeoLocation getIntersection(GeoLocation...geoLocations) throws GeoLocationException
+	public GeoLocation getLocationFromIPAddress(String ipAddress) throws GeoLocationException
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public GeoLocation getLocationFromIPAddress(String arg0) throws GeoLocationException
+	public GeoLocation getLocationFromPhysicalAddress(PhysicalAddress physicalAddress) throws GeoLocationException
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public GeoLocation getLocationFromPhysicalAddress(PhysicalAddress arg0) throws GeoLocationException
+	public GeoLocation getLocationFromZipCode(ZipCode zipCode) throws GeoLocationException
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Taken from StackOverflow
+	 * Center of geometry defined by coordinates 
+	 * https://stackoverflow.com/questions/6671183/calculate-the-center-point-of-multiple-latitude-longitude-coordinate-pairs
+	 */
 	@Override
-	public GeoLocation getLocationFromZipCode(ZipCode arg0) throws GeoLocationException
+	public GeoLocation findCenterOf(GeoLocation...geoLocations) throws GeoLocationException
 	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+		GeoLocation center = null;
+		if (geoLocations.length == 1)
+		{
+			center = geoLocations[0];
+		}
+		else
+		{
+			double x = 0, y = 0, z = 0;
 
+			for (GeoLocation geoLocation : geoLocations)
+			{
+				double latitude = geoLocation.getLatitude().getDecimalValue() * ONE_DEGREE_IN_RADIAN, longitude = geoLocation.getLongitude().getDecimalValue() * ONE_DEGREE_IN_RADIAN;
+				double cosLatitude = Math.cos(latitude);// save it as we need it twice
+				x += cosLatitude * Math.cos(longitude);
+				y += cosLatitude * Math.sin(longitude);
+				z += Math.sin(latitude);
+			}
+
+			int total = geoLocations.length;
+
+			x = x / total;
+			y = y / total;
+			z = z / total;
+
+			double centralLongitude = Math.atan2(y, x);
+			double centralSquareRoot = Math.sqrt(x * x + y * y);
+			double centralLatitude = Math.atan2(z, centralSquareRoot);
+
+			center = new GeoLocation(centralLatitude * ONE_RADIAN_IN_DEGREE, centralLongitude * ONE_RADIAN_IN_DEGREE);
+		}
+		
+		return center;
+	}
 }

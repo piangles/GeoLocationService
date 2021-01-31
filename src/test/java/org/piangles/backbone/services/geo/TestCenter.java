@@ -25,9 +25,8 @@ public class TestCenter
 		 * Coordinates taken from OpenStreetMap
 		 * https://www.openstreetmap.org/export#map=18/40.68949/-74.04477
 		 */
-		//TODO Simplify GeoLocation creation
-		GeoLocation gl1 = new GeoLocation(new GeoCoordinate(40.69021, true), new GeoCoordinate(-74.04707, false));
-		GeoLocation gl2 = new GeoLocation(new GeoCoordinate(40.68819, true), new GeoCoordinate(-74.04216, false));
+		GeoLocation gl1 = new GeoLocation(40.69021, -74.04707);
+		GeoLocation gl2 = new GeoLocation(40.68819, -74.04216);
 		GeoLocation gl3 = center(gl1, gl2);
 		System.out.println(gl3);
 	}
@@ -41,15 +40,15 @@ public class TestCenter
 	private static double pi = Math.PI / 180;
 	private static double xpi = 180 / Math.PI;
 
-	public static GeoLocation center(GeoLocation... arr)
+	public static GeoLocation center(GeoLocation...geoLocations)
 	{
-		if (arr.length == 1)
+		if (geoLocations.length == 1)
 		{
-			return arr[0];
+			return geoLocations[0];
 		}
 		double x = 0, y = 0, z = 0;
 
-		for (GeoLocation c : arr)
+		for (GeoLocation c : geoLocations)
 		{
 			double latitude = c.getLatitude().getDecimalValue() * pi, longitude = c.getLongitude().getDecimalValue() * pi;
 			double cl = Math.cos(latitude);// save it as we need it twice
@@ -58,7 +57,7 @@ public class TestCenter
 			z += Math.sin(latitude);
 		}
 
-		int total = arr.length;
+		int total = geoLocations.length;
 
 		x = x / total;
 		y = y / total;
@@ -68,6 +67,6 @@ public class TestCenter
 		double centralSquareRoot = Math.sqrt(x * x + y * y);
 		double centralLatitude = Math.atan2(z, centralSquareRoot);
 
-		return new GeoLocation(new GeoCoordinate(centralLatitude * xpi, true), new GeoCoordinate(centralLongitude * xpi, false));
+		return new GeoLocation(centralLatitude * xpi, centralLongitude * xpi);
 	}
 }
