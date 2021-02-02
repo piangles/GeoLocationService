@@ -27,23 +27,37 @@ public class GeoLocationServiceImpl implements GeoLocationService
 	{
 		
 	}
-	
+
 	@Override
-	public GeoLocation getLocationFromIPAddress(String ipAddress) throws GeoLocationException
+	public boolean isValid(GeoLocation geoLocation) throws GeoLocationException
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public GeoLocation getGeoLocation(String ipAddress) throws GeoLocationException
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public GeoLocation getLocationFromPhysicalAddress(PhysicalAddress physicalAddress) throws GeoLocationException
+	public GeoLocation getGeoLocation(PhysicalAddress physicalAddress) throws GeoLocationException
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public GeoLocation getLocationFromZipCode(ZipCode zipCode) throws GeoLocationException
+	public PhysicalAddress getPhysicalAddressFromGeoLocation(GeoLocation physicalAddress) throws GeoLocationException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GeoLocation getGeoLocation(ZipCode zipCode) throws GeoLocationException
 	{
 		// TODO Auto-generated method stub
 		return null;
